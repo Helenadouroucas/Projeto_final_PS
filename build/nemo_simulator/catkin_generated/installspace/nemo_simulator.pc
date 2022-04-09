@@ -1,8 +1,0 @@
-prefix=/root/catkin_ws/install
-
-Name: nemo_simulator
-Description: Description of nemo_simulator
-Version: 0.0.0
-Cflags: 
-Libs: -L${prefix}/lib 
-Requires: 

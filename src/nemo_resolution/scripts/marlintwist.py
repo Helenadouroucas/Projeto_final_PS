@@ -19,6 +19,7 @@ class angulomarlin():
     def callback(self, msg):
         index = msg.name.index(self.model_name)
         self.pos = msg.pose[index]
+        self.vel=msg.twist[index]
         self.z = self.pos.orientation.z
         self.w = self.pos.orientation.w
         self.arco = math.acos(self.z)
@@ -50,18 +51,35 @@ vel.linear.y=2
 vel.linear.z=0
 vel.angular.x=0
 vel.angular.y=0
-rate = rospy.Rate(20)
+rate = rospy.Rate(15)
 pub = rospy.Publisher("cmd_vel", Twist,queue_size=10)
-
+modo=False
 while not rospy.is_shutdown():
-    
-    d = vetor.angg-marlin.angg
-    if(d>180):
-        d-=360
-    elif(d<-180):
-        d+=360
-    vel.angular.z=d/16
-    pub.publish(vel)
+    if(modo==False):
+        rospy.loginfo(marlin.vel)
+        d = vetor.angg-marlin.angg
+        if(d>180):
+            d-=360
+        elif(d<-180):
+            d+=360
+        vel.angular.z=d/12
+        pub.publish(vel)
+        if((marlin.vel.linear.x<0.05)and(marlin.vel.linear.y<0.05)and(marlin.vel.linear.x>-0.05)and(marlin.vel.linear.y>-0.05)):
+            modo=True
+            t=0
+    else:
+        if(t<18):
+            vel.linear.y=0
+            vel.angular.z=90/16
+        else:
+            vel.linear.y=2
+            vel.angular.z=0
+        pub.publish(vel)
+        t+=1
+        if(t>74):
+            modo=False
+
+
     rate.sleep()
 
 rospy.spin()

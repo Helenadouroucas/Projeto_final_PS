@@ -1,6 +1,7 @@
 #!/usr/bin/env python3
 # Projeto Final Nautilus
 # Helena e Wagner
+
 import cv2
 import numpy as np
 import rospy
@@ -26,9 +27,10 @@ class Camera():
         maskGreen = cv2.inRange(self.hsv, greenLower, greenUpper)
         maskGreen = cv2.erode(maskGreen, None, iterations=2) 
         maskGreen = cv2.dilate(maskGreen, None, iterations=2)
-        cntGreen = cv2.findContours(maskGreen.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)[-2]
+        cntGreen = cv2.findContours(maskGreen.copy(), cv2.RETR_EXTERNAL, cv2.CHAIN_APPROX_SIMPLE)
         
-        while cntGreen == 0:
+        if cntGreen > 0:
+            rospy.loginfo(cntGreen)
             self.pub = rospy.Publisher('cmd_vel', Twist, queue_size=10)
             velocidade = Twist()
             velocidade.linear.y = 0

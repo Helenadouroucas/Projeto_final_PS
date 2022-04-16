@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# Projeto Final Nautilus
+# Helena e Wagner
 
 import rospy
 import numpy as np
@@ -54,8 +56,10 @@ vel.angular.y=0
 rate = rospy.Rate(15)
 pub = rospy.Publisher("cmd_vel", Twist,queue_size=10)
 modo=False
+
 while not rospy.is_shutdown():
     if(modo==False):
+
         d = vetor.angg-marlin.angg
         if(d>180):
             d-=360
@@ -63,6 +67,7 @@ while not rospy.is_shutdown():
             d+=360
         vel.angular.z=d/12
         pub.publish(vel)
+
         if((marlin.vel.linear.x<0.05)and(marlin.vel.linear.y<0.05)and(marlin.vel.linear.x>-0.05)and(marlin.vel.linear.y>-0.05)):
             modo=True
             t=0

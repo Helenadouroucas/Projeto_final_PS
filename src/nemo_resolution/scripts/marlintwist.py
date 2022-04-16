@@ -56,7 +56,6 @@ pub = rospy.Publisher("cmd_vel", Twist,queue_size=10)
 modo=False
 while not rospy.is_shutdown():
     if(modo==False):
-        rospy.loginfo(marlin.vel)
         d = vetor.angg-marlin.angg
         if(d>180):
             d-=360
